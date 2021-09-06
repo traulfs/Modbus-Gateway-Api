@@ -1,0 +1,796 @@
+openapi: 3.0.3
+info:
+  version: 1.0.1
+  title: taskit Modbus-Gateway
+  description: Modbus-Gateway API
+  termsOfService: 'http://taskit.de/Modbus-Gateway/terms'
+  contact:
+    name: taskit GmbH
+    email: info@taskit.de
+    url: 'http://taskit.de'
+  license:
+    name: taskit tsb
+    url: 'http://taskit.de/Modbus-Gateway/licence'
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /Links:
+    get:
+      summary: Returns all Modbus-Links
+      description: Returns all Modbus-Links
+      operationId: getLinks
+      tags:
+        - Links
+      responses:
+        '200':
+          description: links response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/LinkItem'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /Link/{Name}:
+    get:
+      summary: Returns a Modbus-Link by name
+      description: Returns a Modbus-Link by name
+      tags:
+        - Links 
+      operationId: getLink
+      parameters:
+        - name: Name
+          in: path
+          description: name of Modbus-Link
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: link response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Writes a Modbus-Link by name
+      description: Writes a Modbus-Link by name
+      tags:
+        - Links
+      operationId: putLink
+      requestBody:
+        description: Modbus-Link to write
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Link'
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the Modbus-Link
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Modbus-Link response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Deletes a Modbus-Link by name
+      description: Deletes a Modbus-Link by name
+      tags:
+        - Links
+      operationId: deleteLink
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the Modbus-Link
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Modbus-Link deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /Devices:
+    get:
+      summary: Returns all Modbus-Devices
+      description: Returns all Modbus-Devices
+      operationId: getDevices
+      tags:
+        - Devices
+      responses:
+        '200':
+          description: devices response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/DeviceItem'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /Device/{Name}:
+    get:
+      summary: Returns a Modbus-Device by name
+      description: Returns a Modbus-Device by name
+      tags:
+        - Devices 
+      operationId: getDevice
+      parameters:
+        - name: Name
+          in: path
+          description: name of Modbus-Device
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: device response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Writes a Modbus-Device by name
+      description: Writes a Modbus-Device by name
+      tags:
+        - Devices
+      operationId: putDevice
+      requestBody:
+        description: Modbus-Device to write
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the Modbus-Device
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Modbus-Device response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Deletes a Modbus-Device by name
+      description: Deletes a Modbus-Device by name
+      tags:
+        - Devices
+      operationId: deleteDevice
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the Modbus-Device
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Modbus-Device deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /ModbusReg/{Device}/{Function}/{Address}/{Count}:
+    get:
+      summary: Modbus Read by Register
+      description: Reads direct a Modbus Register
+      tags:
+        - Modbus
+      operationId: getModbusByRegister
+      parameters:
+        - name: Device
+          in: path
+          description: Name of Modbus Device
+          required: true
+          schema:
+            type: string
+            minimum: 2
+            maximum: 20
+        - name: Function
+          in: path
+          description: Modbus Function (HR = Holding Register, CO = Coil)
+          required: true
+          schema:
+            type: string
+            enum:
+              - HR
+              - IR
+              - CO
+              - DI
+            description: HR means holding register (16 Bit), CO means coil (boolean)
+        - name: Address
+          in: path
+          description: Modbus Register Address (hex or decimal)
+          required: true
+          schema:
+            type: string
+            default: "0xabcd"
+            #pattern: '^((0[xX]){1}[0-9,A-F,a-f]{1,4})|([0-9]{1-5})$'
+        - name: Count
+          in: path
+          description: Number of registers to read (decimal)
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 127
+            default: 1
+      responses:
+        '200':
+          description: Read Register Value (Hex Bytes)
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 1A7F
+        default:
+          description: unexpected error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: error message
+    put:
+      summary: Modbus Write by Register
+      description: Writes direct to a Modbus Register
+      tags:
+        - Modbus
+      operationId: putModbusByRegister
+      requestBody:
+        description: Values to write
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: 1A7F
+              #pattern: '^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){0,}$'
+              #pattern: '^[0-9,A-F,a-f]{1,4}$'
+      parameters:
+        - name: Device
+          in: path
+          description: Name of Modbus Device
+          required: true
+          schema:
+            type: string
+            minimum: 2
+            maximum: 20
+        - name: Function
+          in: path
+          description: Modbus Function (HR = Holding Register, CO = Coil)
+          required: true
+          schema:
+            type: string
+            enum:
+              - HR
+              - CO
+            description: HR means holding register (16 Bit), CO means coil (boolean)
+        - name: Address
+          in: path
+          description: Modbus Register Address (hex or decimal)
+          required: true
+          schema:
+            type: string
+            default: "0x0000"
+            example: 0x1A7F
+            #pattern: '^[0-9,A-F,a-f]{1,4}$'
+        - name: Count
+          in: path
+          description: Number of registers to write, 0 means single
+          required: true
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 127
+            default: 0
+      responses:
+        '200':
+          description: Modbus write response (Hex Bytes)
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 1A7F
+        default:
+          description: unexpected error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: error message
+  /ModbusTag/{Tag}:
+    get:
+      summary: Modbus Read by the name of a tag
+      description: Makes a Modbus read as described in the tag
+      tags:
+        - Modbus
+      operationId: getModbusByTag
+      parameters:
+        - name: Tag
+          in: path
+          description: Name of the tag
+          required: true
+          schema:
+            type: string
+            minimum: 2
+            maximum: 20
+      responses:
+        '200':
+          description: Modbus read response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagData'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Modbus Write by the name of a tag
+      description: Makes a Modbus write as described in the tag
+      tags:
+        - Modbus
+      operationId: putModbusByTag
+      requestBody:
+        description: TagData to write
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagData'
+      parameters:
+        - name: Tag
+          in: path
+          description: Name of the tag
+          required: true
+          schema:
+            type: string
+            minimum: 2
+            maximum: 20
+      responses:
+        '200':
+          description: Modbus write response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagData'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /Tags:
+    get:
+      summary: Returns all tags
+      description: Returns all tags
+      tags:
+        - Tags
+      operationId: getTags
+      responses:
+        '200':
+          description: Tags response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /Tag/{Name}:
+    get:
+      summary: Returns a tag by name
+      description: Returns a tags based on the name
+      tags:
+        - Tags
+      operationId: getTag
+      parameters:
+        - name: Name
+          in: path
+          description: name of the tag
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: tag response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Writes a tag by name
+      description: Writes a tag based on the name
+      tags:
+        - Tags
+      operationId: putTag
+      requestBody:
+        description: Tag to write
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tag'
+      parameters:
+        - name: Name
+          in: path
+          description: Name of the tag
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: tag response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Deletes a tag by name
+      description: deletes a tag based on the name
+      tags:
+        - Tags
+      operationId: deleteTag
+      parameters:
+        - name: Name
+          in: path
+          description: TSB channel of port
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: tag deleted
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /MQTT:
+    get:
+      summary: Gets MQTT Broker Settings
+      description: Gets MQTT Broker Settings
+      tags:
+        - MQTT
+      operationId: getMQTT
+      responses:
+        '200':
+          description: MQTT response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MQTT'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Puts MQTT Broker Settings
+      description: Puts MQTT Broker Settings
+      tags:
+        - MQTT
+      operationId: putMQTT
+      requestBody:
+        description: Tag to write
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MQTT'
+      responses:
+        '200':
+          description: tag response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MQTT'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    LinkItem:
+      required:
+        - link
+        - value
+      properties:
+        link:
+          type: string
+        value:
+          $ref: '#/components/schemas/Link'
+    Link:
+      required:
+        - protocol
+        - ip 
+        - port 
+        - serialPort
+        - baudRate
+        - databits
+        - stopbits
+        - parity
+      properties:
+        protocol:
+          type: string
+          enum:
+            - "TCP"
+            - "RTU"
+            - "ASCII"
+          default: "TCP"
+        ip:
+          type: string
+          default: "localhost"
+          example: "localhost"
+        port:
+          type: integer
+          default: 502
+          example: 502
+        serialPort:
+          type: string
+          default: "com1"
+          example: "COM1"
+        baudRate:
+          type: integer
+          enum:
+            - 0
+            - 300
+            - 600
+            - 1200
+            - 2400
+            - 4800
+            - 9600
+            - 19200
+            - 38400
+            - 57600
+            - 76800
+            - 115200
+            - 230400
+            - 460800
+            - 921600
+            - 1500000
+            - 3000000
+          default: 115200
+        databits:
+          type: integer
+          enum: 
+            - 5
+            - 6
+            - 7
+            - 8
+          default: 8  
+        stopbits:
+          type: integer
+          enum: 
+            - 1
+            - 2
+          default: 1
+        parity: 
+          type: string
+          enum: 
+            - "N"
+            - "O"
+            - "E"  
+          default: "E"       
+    DeviceItem:
+      required:
+        - device
+        - value
+      properties:
+        device:
+          type: string
+        value:
+          $ref: '#/components/schemas/Device'
+    Device:
+      required:
+        - link
+        - slaveid
+        - timeoutMs
+      properties:
+        link:
+          type: string
+        slaveid:
+          type: integer
+          minimum: 0
+          maximum: 255
+          default: 1
+        timeoutMs:
+          type: integer
+          default: 0
+    Tag:
+      required:
+        - device
+        - publish
+        - properties
+      properties:
+        device:
+          type: string
+        publish:
+          type: integer
+          minimum: 0
+          maximum: 1000000 
+          default: 0
+          description: How often in ms should the tag will be published, 0 means no publishing   
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagProperty'
+    TagProperty:
+      required:
+        - name
+        - function
+        - address
+        - type
+        - count
+      properties:
+        name:
+         type: string
+        function:
+          type: string
+          enum:
+            - HR
+            - IR 
+            - CO
+            - DI
+          description: HR means holding register (16 Bit), IR means input register (16 Bit), CO means coil (boolean), DI means discrete input (boolean)
+        address:
+          type: integer
+          minimum: 0
+          description: Modbus register address 
+        count:
+          type: integer
+          minimum: 1
+          maximum: 127
+          default: 1
+        type:
+          type: string
+          enum:
+            - boolean
+            - string
+            - int16
+            - uint16
+            - int32
+            - uint32
+            - float32 
+            - float64
+    TagData:
+      required:
+        - data
+      properties:
+        tag: 
+          type: string
+          readOnly: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagItem'
+    TagItem:
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    MQTT:
+      required:
+        - enabled
+        - topic
+        - url
+        - port
+        - qos    
+        - user    
+        - passwd   
+      properties:
+        enabled:
+          type: boolean
+          default: false
+        topic:
+          type: string
+          description: MQTT main topic
+        url:
+          type: string
+          description: URL of MQTT broker
+        port:
+          type: integer
+          description: MQTT broker tcp port
+        qos:
+          type: integer
+          minimum:  0
+          maximum:  2
+          description: Quality of service (0-2)
+        user:
+          type: string
+          description: MQTT broker username
+        passwd:
+          type: string
+          description: MQTT broker password  
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
