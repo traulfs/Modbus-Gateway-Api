@@ -1,0 +1,42 @@
+devices:
+  Device1:
+    link: Link1
+    slaveid: 1
+    timeoutms: 0
+links:
+  Link1:
+    baudrate: 0
+    databits: 8
+    ip: 10.211.55.4
+    parity: "E"
+    port: 502
+    protocol: TCP
+    serialport: string
+    stopbits: 1
+  Link2:
+    baudrate: 115200
+    databits: 7
+    ip: localhost
+    parity: "O"
+    port: 502
+    protocol: TCP
+    serialport: string
+    stopbits: 2
+  LINKER3:
+    baudrate: 115200
+    databits: 8
+    ip: localhost
+    parity: "N"
+    port: 502
+    protocol: TCP
+    serialport: COM1
+    stopbits: 1
+mqtt:
+  enabled: true
+  passwd: "12345678"
+  port: 1883
+  qos: 0
+  topic: Modbus
+  url: hip-assistant.cloudmqtt.com
+  user: "Modbus"
+tags: {}
