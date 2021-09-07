@@ -607,7 +607,7 @@ components:
           default: "com1"
           example: "COM1"
         baudRate:
-          type: integer
+          type: string
           enum:
             - 0
             - 300
@@ -628,7 +628,7 @@ components:
             - 3000000
           default: 115200
         databits:
-          type: integer
+          type: string
           enum: 
             - 5
             - 6
@@ -636,7 +636,7 @@ components:
             - 8
           default: 8  
         stopbits:
-          type: integer
+          type: string
           enum: 
             - 1
             - 2
