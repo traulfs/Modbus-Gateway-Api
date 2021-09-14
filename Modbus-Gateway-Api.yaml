@@ -519,20 +519,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /MQTT:
+  /Mqtt:
     get:
-      summary: Gets MQTT Broker Settings
-      description: Gets MQTT Broker Settings
+      summary: Gets Mqtt Broker Settings
+      description: Gets Mqtt Broker Settings
       tags:
-        - MQTT
-      operationId: getMQTT
+        - Mqtt
+      operationId: getMqtt
       responses:
         '200':
-          description: MQTT response
+          description: Mqtt response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MQTT'
+                $ref: '#/components/schemas/Mqtt'
         default:
           description: unexpected error
           content:
@@ -540,25 +540,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Puts MQTT Broker Settings
-      description: Puts MQTT Broker Settings
+      summary: Puts Mqtt Broker Settings
+      description: Puts Mqtt Broker Settings
       tags:
-        - MQTT
-      operationId: putMQTT
+        - Mqtt
+      operationId: putMqtt
       requestBody:
-        description: Tag to write
-        required: true
+        description: Mqtt Configuration  
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MQTT'
+              $ref: '#/components/schemas/Mqtt'
+        required: true
       responses:
         '200':
           description: tag response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MQTT'
+                $ref: '#/components/schemas/Mqtt'
         default:
           description: unexpected error
           content:
@@ -750,7 +750,7 @@ components:
           type: string
         value:
           type: string
-    MQTT:
+    Mqtt:
       required:
         - enabled
         - topic
@@ -765,13 +765,13 @@ components:
           default: false
         topic:
           type: string
-          description: MQTT main topic
+          description: Mqtt main topic
         url:
           type: string
-          description: URL of MQTT broker
+          description: URL of Mqtt broker
         port:
           type: integer
-          description: MQTT broker tcp port
+          description: Mqtt broker tcp port
         qos:
           type: integer
           minimum:  0
@@ -779,10 +779,10 @@ components:
           description: Quality of service (0-2)
         user:
           type: string
-          description: MQTT broker username
+          description: Mqtt broker username
         passwd:
           type: string
-          description: MQTT broker password  
+          description: Mqtt broker password  
     Error:
       required:
         - code
