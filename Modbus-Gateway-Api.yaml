@@ -12,8 +12,8 @@ info:
     name: taskit tsb
     url: 'http://taskit.de/Modbus-Gateway/licence'
 servers:
-  - url: 'http://10.1.108.66:8080'
-  - url: 'http://localhost:8080'
+  - url: 'https://modbus-gateway-server-ryyjinlkkq-ey.a.run.app'
+
 paths:
   /Links:
     get:
