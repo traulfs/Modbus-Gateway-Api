@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 1.0.1
+  version: 1.0.2
   title: taskit Modbus-Gateway
   description: Modbus-Gateway API
   termsOfService: 'http://taskit.de/Modbus-Gateway/terms'
@@ -12,6 +12,7 @@ info:
     name: taskit tsb
     url: 'http://taskit.de/Modbus-Gateway/licence'
 servers:
+  - url: 'http://localhost'
   - url: 'https://modbus-gateway-server-ryyjinlkkq-ey.a.run.app'
 
 paths:
@@ -570,12 +571,12 @@ components:
   schemas:
     LinkItem:
       required:
+        - name
         - link
-        - value
       properties:
-        link:
+        name:
           type: string
-        value:
+        link:
           $ref: '#/components/schemas/Link'
     Link:
       required:
@@ -651,12 +652,12 @@ components:
           default: "E"       
     DeviceItem:
       required:
+        - name
         - device
-        - value
       properties:
-        device:
+        name:
           type: string
-        value:
+        device:
           $ref: '#/components/schemas/Device'
     Device:
       required:
