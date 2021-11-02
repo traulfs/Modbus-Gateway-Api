@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: "3.0.0"
 info:
-  version: 1.0.2
+  version: 1.0.3
   title: taskit Modbus-Gateway
   description: Modbus-Gateway API
   termsOfService: 'http://taskit.de/Modbus-Gateway/terms'
@@ -796,4 +796,17 @@ components:
         message:
           type: string
           description: Error message
-        
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missign or invalid
+      headers:
+          WWW_Authenticate:
+            schema:
+              type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - BearerAuth: [ ]
