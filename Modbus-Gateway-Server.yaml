@@ -40,3 +40,6 @@ mqtt:
   url: hip-assistant.cloudmqtt.com
   user: "Modbus"
 tags: {}
+verbose: true
+jwt: false
+port: 8080
