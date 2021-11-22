@@ -41,5 +41,5 @@ mqtt:
   user: "Modbus"
 tags: {}
 verbose: true
-jwt: false
+jwt: true
 port: 8080
